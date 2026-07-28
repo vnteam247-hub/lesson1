@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caddie English Training - Lesson Framework</title>
+  <title>Lesson 1 - Caddie English Training</title>
   <style>
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -18,7 +18,7 @@
       font-size: 24px;
     }
     
-    /* Khung Player ghim cố định phía trên */
+    /* Khung Player cố định phía trên */
     .sticky-player {
       position: sticky;
       top: 10px;
@@ -118,14 +118,14 @@
 </head>
 <body>
 
-  <h1>CHƯƠNG TRÌNH ĐÀO TẠO TIẾNG ANH CADDIE</h1>
+  <h1>CHƯƠNG TRÌNH ĐÀO TẠO TIẾNG ANH CADDIE - LESSON 1</h1>
 
   <!-- 1. KHUNG PHÁT VIDEO CỐ ĐỊNH -->
   <div class="sticky-player">
     <div class="iframe-wrapper">
       <div id="player"></div>
     </div>
-    <div id="status-text">▶ Chọn một Section bên dưới để bắt đầu xem clip thực hành</div>
+    <div id="status-text">▶ Chọn một Section bên dưới để xem clip thực hành</div>
   </div>
 
   <!-- 2. BẢNG NỘI DUNG LESSON 1 -->
@@ -152,7 +152,7 @@
             </ul>
           </td>
           <td>
-            <button class="btn-play" onclick="playSegment('-ylFYTNJGaw', 0, 634, 'Section 1.1: Bảng chữ cái')">
+            <button class="btn-play" onclick="playSegment(0, 634, 'Section 1.1: Bảng chữ cái')">
               ▶ 00.00-10.34
             </button>
           </td>
@@ -164,12 +164,12 @@
           <td><b>Giới thiệu bản thân</b></td>
           <td>
             <ul class="content-list">
-              <li>Chào hỏi theo thời gian: "Good morning / Afternoon / Evening"</li>
+              <li>Chào hỏi theo thời gian: "Good morning / Good afternoon / Good evening"</li>
               <li>Xác nhận và xưng hô</li>
             </ul>
           </td>
           <td>
-            <button class="btn-play" onclick="playSegment('-ylFYTNJGaw', 634, 835, 'Section 1.2: Giới thiệu bản thân')">
+            <button class="btn-play" onclick="playSegment(634, 835, 'Section 1.2: Giới thiệu bản thân')">
               ▶ 10.34-13.55
             </button>
           </td>
@@ -186,8 +186,8 @@
             </ul>
           </td>
           <td>
-            <button class="btn-play" onclick="playSegment('eYLShPjYGE0', 0, 258, 'Section 1.3: Số đếm')">
-              ▶ 00.00-04.18
+            <button class="btn-play" onclick="playSegment(835, 1091, 'Section 1.3: Số đếm')">
+              ▶ 13:55-18:11
             </button>
           </td>
         </tr>
@@ -203,8 +203,8 @@
             </ul>
           </td>
           <td>
-            <button class="btn-play" onclick="playSegment('eYLShPjYGE0', 258, 477, 'Section 1.4: Sở thích')">
-              ▶ 04.18-07.57
+            <button class="btn-play" onclick="playSegment(1091, 1311, 'Section 1.4: Sở thích')">
+              ▶ 18:11-21:51
             </button>
           </td>
         </tr>
@@ -219,7 +219,7 @@
             </ul>
           </td>
           <td>
-            <button class="btn-play" onclick="playSegment('eYLShPjYGE0', 477, 600, 'Section 1.5: Thực hành')">
+            <button class="btn-play" onclick="playSegment(1311, 1500, 'Section 1.5: Thực hành & Luyện tập')">
               ▶ Luyện tập
             </button>
           </td>
@@ -228,30 +228,27 @@
     </table>
   </div>
 
-  <!-- 3. SCRIPT YOUTUBE IFRAME PLAYER API -->
+  <!-- 3. SCRIPT ĐIỀU KHIỂN YOUTUBE PLAYER -->
   <script>
-    // Tải API của YouTube
+    const defaultVideoId = '_8Fupiskpe0'; // Video ID cập nhật từ link mới của bạn
+
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     var player;
-    var currentVideoId = '';
     var stopTime = 0;
     var checkInterval;
 
     function onYouTubeIframeAPIReady() {
-      // Đọc URL xem có truyền tham số v, start, end từ link ngoài (Excel) không
+      // Tự động kiểm tra xem có tham số start và end truyền từ URL ngoài (Excel) không
       const urlParams = new URLSearchParams(window.location.search);
-      const v = urlParams.get('v') || 'eYLShPjYGE0'; // Dùng Clip 2 làm mặc định khởi tạo để tránh lỗi gạch ngang đầu ID
       const start = parseInt(urlParams.get('start')) || 0;
       const end = parseInt(urlParams.get('end')) || 0;
 
-      currentVideoId = v;
-
       player = new YT.Player('player', {
-        videoId: v,
+        videoId: defaultVideoId,
         playerVars: { 
           'enablejsapi': 1, 
           'origin': window.location.origin,
@@ -260,15 +257,15 @@
         events: {
           'onReady': function() {
             if (end > start) {
-              playSegment(v, start, end, "Đoạn bài học chỉ định");
+              playSegment(start, end, "Phân đoạn bài học chỉ định");
             }
           }
         }
       });
     }
 
-    // Hàm chuyển Video và điều khiển chạy đúng mốc thời gian
-    function playSegment(videoId, startTime, endTime, title) {
+    // Hàm phát đúng mốc thời gian và tự ngắt
+    function playSegment(startTime, endTime, title) {
       if (!player) return;
 
       clearInterval(checkInterval);
@@ -276,23 +273,14 @@
 
       document.getElementById('status-text').innerText = "Đang phát: " + title;
 
-      // Nếu chọn Section của Video khác -> Nạp Video mới
-      if (currentVideoId !== videoId) {
-        currentVideoId = videoId;
-        player.loadVideoById({
-          videoId: videoId,
-          startSeconds: startTime
-        });
-      } else {
-        player.seekTo(startTime, true);
-        player.playVideo();
-      }
+      player.seekTo(startTime, true);
+      player.playVideo();
 
-      // Vòng lặp tự động Tạm dừng khi chạm mốc endTime
+      // Kiểm tra để tự động tạm dừng khi kết thúc mốc thời gian
       checkInterval = setInterval(function() {
         if (player.getCurrentTime() >= stopTime) {
           player.pauseVideo();
-          document.getElementById('status-text').innerText = "⏸ Hoàn thành: " + title + " (Đã tự động dừng)";
+          document.getElementById('status-text').innerText = "⏸ Hoàn thành: " + title + " (Tự động dừng)";
           clearInterval(checkInterval);
         }
       }, 200);
